@@ -1,3 +1,5 @@
 /env
 .vscode/
 .vscode/settings.json
+__pycache__/
+.mypy_cache/
