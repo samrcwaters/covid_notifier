@@ -2,18 +2,13 @@ import boto3
 from botocore.exceptions import ClientError
 
 SENDER = "Sam Waters <samrolandwaters@gmail.com>"
-
 RECIPIENT = "samrolandwaters@gmail.com"
-
 AWS_REGION = "us-west-2"
-
 SUBJECT = "SES Test Email"
-
 BODY_TEXT = ("Amazon SES Test (Python)\r\n"
              "This email was sent with Amazon SES using the "
              "AWS SDK for Python (Boto)."
             )
-
 BODY_HTML = """<html>
 <head></head>
 <body>
@@ -25,7 +20,6 @@ BODY_HTML = """<html>
 </body>
 </html>
             """
-
 CHARSET = "UTF-8"
 
 # Create new SES resource and specify a region
