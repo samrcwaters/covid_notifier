@@ -6,22 +6,32 @@ BASE_API_URL = 'https://covid19.mathdro.id/api/daily'
 NOT_FOUND_EXCEPTION = "Not Found"
 
 def lambda_handler(event, context):
-  today = date.today()
-  today_fmt = today.strftime("%m-%d-%y")
+  counties = ["Yolo", "Sacramento"]
+
+  current_day = get_target_day()
+
+  data = json.loads(current_day['text'])
+
+  data = list(filter(lambda x: x["admin2"] in counties, data))
+  print(data)
+
+def get_day_data(day: date):
+  today_fmt = day.strftime("%m-%d-%y")
   today_url = f'{BASE_API_URL}/{today_fmt}'
-  r = requests.get(today_url)
+  return requests.get(today_url)
+
+def get_target_day() -> object:
+  info = ""
+  r = get_day_data(date.today())
 
   if r.reason == NOT_FOUND_EXCEPTION:
-    yesterday = today - timedelta(days=1)
-    yesterday_fmt = yesterday.strftime("%m-%d-%y")
-    yesterday_url = f'{BASE_API_URL}/{yesterday_fmt}'
-    r = requests.get(yesterday_url)
+    r = get_day_data(date.today() - timedelta(days=1))
+    info = "Data has not yet been provided for today. This is yesterday's data."
 
-  data = json.loads(r.text)
-
-  for o in data:
-    if o["admin2"] == "Sacramento":
-      print(o)
+  return {
+    "text": r.text,
+    "info": info
+  }
 
 if __name__ == "__main__":
   lambda_handler(None, None)
